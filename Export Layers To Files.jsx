@@ -1,4 +1,4 @@
-﻿// Copyright 2007.  Adobe Systems, Incorporated.  All rights reserved.
+// Copyright 2007.  Adobe Systems, Incorporated.  All rights reserved.
 
 // This script will export each layer in the document to a separate file.
 
@@ -217,6 +217,8 @@ var strCheckboxPNGTransparency = localize("$$$/JavaScripts/ExportLayersToFiles/T
 var strCheckboxPNGInterlaced = localize("$$$/JavaScripts/ExportLayersToFiles/Interlaced=Interlaced");
 
 var strCheckboxPNGTrm = localize("$$$/JavaScripts/ExportLayersToFiles/Trim=Trim Layers");
+
+var strCheckboxPNGTrmY = "Trim Layers Y";
 
 var strPNG24Options = localize("$$$/JavaScripts/ExportLayersToFiles/PNG24Options=PNG-24 Options:");
 
@@ -761,11 +763,15 @@ function settingDialog(exportInfo) {
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trm = dlgMain.pnlFileType.pnlOptions.grpPNG8Options.add("checkbox", undefined, strCheckboxPNGTrm.toString());
 
+    dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG8Options.add("checkbox", undefined, strCheckboxPNGTrmY.toString());
+
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trans.value = exportInfo.png8Transparency;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Inter.value = exportInfo.png8Interlaced;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trm.value = exportInfo.png8Trim;
+
+    dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8TrimY.value = exportInfo.png8TrimY;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.visible = (exportInfo.fileType == png8Index);
 
@@ -781,11 +787,15 @@ function settingDialog(exportInfo) {
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrm.toString());
 
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmY.toString());
+
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trans.value = exportInfo.png24Transparency;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Inter.value = exportInfo.png24Interlaced;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm.value = exportInfo.png24Trim;
+
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY.value = exportInfo.png24TrimY;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.visible = (exportInfo.fileType == png24Index);
 
@@ -1249,6 +1259,8 @@ function settingDialog(exportInfo) {
 
     exportInfo.png24Trim = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm.value;
 
+    exportInfo.png24TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY.value;
+
     index = dlgMain.pnlFileType.pnlOptions.grpTIFFOptions.grpCompression.ddCompression.selection.index;
 
     if (index == compNoneIndex) {
@@ -1420,6 +1432,8 @@ function initExportInfo(exportInfo) {
     exportInfo.png24Interlaced = false;
 
     exportInfo.png24Trim = true;
+
+    exportInfo.png24TrimY = false;
 
     exportInfo.png8Transparency = true;
 
@@ -2172,16 +2186,19 @@ function exportChildren(dupObj, orgObj, exportInfo, dupDocRef, fileNamePrefix) {
 					
 
 				}
+                
 
-				if ((exportInfo.png24Trim == true)&&(png24Index == exportInfo.fileType)) { //transparancy checked?
+				if ((exportInfo.png24Trim == true || exportInfo.png24TrimY == true)&&(png24Index == exportInfo.fileType)) { //transparancy checked?
 
 					
 
 					if (activeDocument.activeLayer.isBackgroundLayer == false) { //is it anything but a background layer?
 
 					
-
+                        if (exportInfo.png24Trim == true)
 						app.activeDocument.trim(TrimType.TRANSPARENT);
+                        else 
+                        app.activeDocument.trim(TrimType.TRANSPARENT, true, false, false, false);
 
 						
 
@@ -2664,4 +2681,3 @@ function logToHeadLights(eventRecord)
 
 
 // End Export Layers To Files.jsx
-
