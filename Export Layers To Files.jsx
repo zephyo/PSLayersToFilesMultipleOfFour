@@ -218,7 +218,10 @@ var strCheckboxPNGInterlaced = localize("$$$/JavaScripts/ExportLayersToFiles/Int
 
 var strCheckboxPNGTrm = localize("$$$/JavaScripts/ExportLayersToFiles/Trim=Trim Layers");
 
-var strCheckboxPNGTrmY = "Trim Layers Y";
+var strCheckboxPNGTrmL = "Trim Left";
+var strCheckboxPNGTrmR = "Trim Right";
+var strCheckboxPNGTrmT = "Trim Top";
+var strCheckboxPNGTrmB = "Trim Bottom";
 
 var strPNG24Options = localize("$$$/JavaScripts/ExportLayersToFiles/PNG24Options=PNG-24 Options:");
 
@@ -763,15 +766,11 @@ function settingDialog(exportInfo) {
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trm = dlgMain.pnlFileType.pnlOptions.grpPNG8Options.add("checkbox", undefined, strCheckboxPNGTrm.toString());
 
-    dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG8Options.add("checkbox", undefined, strCheckboxPNGTrmY.toString());
-
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trans.value = exportInfo.png8Transparency;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Inter.value = exportInfo.png8Interlaced;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8Trm.value = exportInfo.png8Trim;
-
-    dlgMain.pnlFileType.pnlOptions.grpPNG8Options.png8TrimY.value = exportInfo.png8TrimY;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG8Options.visible = (exportInfo.fileType == png8Index);
 
@@ -785,17 +784,19 @@ function settingDialog(exportInfo) {
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Inter = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGInterlaced.toString());
 
-    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrm.toString());
-
-    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmY.toString());
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmL = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmL.toString());
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmR = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmR.toString());
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmB = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmB.toString());
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmT = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.add("checkbox", undefined, strCheckboxPNGTrmT.toString());
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trans.value = exportInfo.png24Transparency;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Inter.value = exportInfo.png24Interlaced;
 
-    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm.value = exportInfo.png24Trim;
-
-    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY.value = exportInfo.png24TrimY;
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmL.value = exportInfo.png24TrmL;
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmR.value = exportInfo.png24TrmR;
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmB.value = exportInfo.png24TrmB;
+    dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmT.value = exportInfo.png24TrmT;
 
     dlgMain.pnlFileType.pnlOptions.grpPNG24Options.visible = (exportInfo.fileType == png24Index);
 
@@ -1257,9 +1258,10 @@ function settingDialog(exportInfo) {
 
     exportInfo.png24Interlaced = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Inter.value;
 
-    exportInfo.png24Trim = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24Trm.value;
-
-    exportInfo.png24TrimY = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrimY.value;
+    exportInfo.png24TrmL = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmL.value;
+    exportInfo.png24TrmR = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmR.value;
+    exportInfo.png24TrmB = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmB.value;
+    exportInfo.png24TrmT = dlgMain.pnlFileType.pnlOptions.grpPNG24Options.png24TrmT.value;
 
     index = dlgMain.pnlFileType.pnlOptions.grpTIFFOptions.grpCompression.ddCompression.selection.index;
 
@@ -1431,9 +1433,10 @@ function initExportInfo(exportInfo) {
 
     exportInfo.png24Interlaced = false;
 
-    exportInfo.png24Trim = true;
-
-    exportInfo.png24TrimY = false;
+    exportInfo.png24TrmL = true;
+    exportInfo.png24TrmR = true;
+    exportInfo.png24TrmB = true;
+    exportInfo.png24TrmT = true;
 
     exportInfo.png8Transparency = true;
 
@@ -2188,36 +2191,24 @@ function exportChildren(dupObj, orgObj, exportInfo, dupDocRef, fileNamePrefix) {
 				}
                 
 
-				if ((exportInfo.png24Trim == true || exportInfo.png24TrimY == true)&&(png24Index == exportInfo.fileType)) { //transparancy checked?
-
-					
-
+				if (png24Index == exportInfo.fileType && 
+                    (exportInfo.png24TrmL || exportInfo.png24TrmR  || exportInfo.png24TrmT || exportInfo.png24TrmB )) {     //transparancy checked?
 					if (activeDocument.activeLayer.isBackgroundLayer == false) { //is it anything but a background layer?
-
-					
-                        if (exportInfo.png24Trim == true)
-						app.activeDocument.trim(TrimType.TRANSPARENT);
+                        if (exportInfo.png24TrmL && exportInfo.png24TrmR  && exportInfo.png24TrmT && exportInfo.png24TrmB )
+						    app.activeDocument.trim(TrimType.TRANSPARENT);
                         else 
-                        app.activeDocument.trim(TrimType.TRANSPARENT, true, false, false, false);
-
-						
-
+                            app.activeDocument.trim(TrimType.TRANSPARENT, exportInfo.png24TrmT, exportInfo.png24TrmL, exportInfo.png24TrmB, exportInfo.png24TrmR);
 					}
-
-					
-
                 }
                 
                 // if multiples of four, ensure the document is sized correctly
                 if (exportInfo.multiplesOfFour == true){
                     var w = app.activeDocument.width, h = app.activeDocument.height;
-                    while (w%4 != 0){
-                        w++;
+                    var w2 = Math.round(w%4), h2 = Math.round(h%4);
+                    if ((w2 > 0 && w2 < 4) || (h2 > 0 && h2 < 4))
+                    {
+                        app.activeDocument.resizeCanvas(w + (4-w2), h + (4-h2),AnchorPosition.MIDDLECENTER);
                     }
-                    while(h%4 != 0){
-                        h++;
-                    }
-                    app.activeDocument.resizeCanvas(w, h,AnchorPosition.MIDDLECENTER);
                 }
 
             }
